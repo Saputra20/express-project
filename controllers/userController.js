@@ -10,6 +10,7 @@ const userRequest = require("../request/userRequest");
 // import helper
 const apiResponse = require("../helper/response");
 const validation = require("../helper/validation");
+const mail = require("../helper/mail");
 
 // import middleware
 
@@ -48,6 +49,16 @@ router.post("/", userRequest, (req, res) => {
       .catch((error) => {
         apiResponse.error(res, error.message);
       });
+  } catch (error) {
+    apiResponse.error(res, error.message, error.status);
+  }
+});
+
+router.post("/mail-send", async (req, res) => {
+  try {
+    const { body } = req;
+    await mail.test(body);
+    apiResponse.success(res, "berhasil");
   } catch (error) {
     apiResponse.error(res, error.message, error.status);
   }
